@@ -27,7 +27,7 @@ fn part1(calories: impl Iterator<Item = u64>) -> u64 {
 fn part2(calories: impl Iterator<Item = u64>) -> u64 {
 	let mut calories = calories.collect::<Vec<_>>();
 	calories.sort_unstable_by(|a, b| b.cmp(a));
-	calories.into_iter().take(3).sum::<u64>()
+	calories.into_iter().take(3).sum()
 }
 
 fn main() {
