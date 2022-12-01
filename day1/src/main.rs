@@ -1,7 +1,7 @@
 const INPUT: &str = include_str!("real_input.txt");
 
 fn calories(input: &str) -> impl Iterator<Item = u64> + '_ {
-	input.split("\n\n").map(|s| {
+	input.split_terminator("\n\n").map(|s| {
 		s.lines()
 			.map(|l| l.parse::<u64>().expect("invalid input"))
 			.sum()
