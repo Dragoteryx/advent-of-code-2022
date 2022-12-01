@@ -1,7 +1,9 @@
+use itertools::Itertools;
+
 const INPUT: &str = include_str!("real_input.txt");
 
 fn calories(input: &str) -> impl Iterator<Item = u64> + '_ {
-	input.split_terminator("\n\n").map(|s| {
+	input.split("\n\n").map(|s| {
 		s.lines()
 			.map(|l| l.parse::<u64>().expect("invalid input"))
 			.sum()
@@ -13,9 +15,7 @@ fn part1(calories: impl Iterator<Item = u64>) -> u64 {
 }
 
 fn part2(calories: impl Iterator<Item = u64>) -> u64 {
-	let mut calories = calories.collect::<Vec<_>>();
-	calories.sort_unstable_by(|a, b| b.cmp(a));
-	calories.into_iter().take(3).sum()
+	calories.sorted_unstable_by(|a, b| b.cmp(a)).take(3).sum()
 }
 
 fn main() {
