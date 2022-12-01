@@ -1,4 +1,5 @@
 use itertools::Itertools;
+use std::cmp::Reverse;
 
 const INPUT: &str = include_str!("real_input.txt");
 
@@ -15,7 +16,7 @@ fn part1(calories: impl Iterator<Item = u64>) -> u64 {
 }
 
 fn part2(calories: impl Iterator<Item = u64>) -> u64 {
-	calories.sorted_unstable_by(|a, b| b.cmp(a)).take(3).sum()
+	calories.map(Reverse).k_smallest(3).map(|n| n.0).sum()
 }
 
 fn main() {
