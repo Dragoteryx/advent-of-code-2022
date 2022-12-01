@@ -19,7 +19,7 @@ fn part2(calories: impl Iterator<Item = u64>) -> u64 {
 }
 
 fn main() {
-  println!("--- day1 ---");
+	println!("--- day1 ---");
 	println!("part 1 => {}", part1(calories(INPUT)));
 	println!("part 2 => {}", part2(calories(INPUT)));
 }
