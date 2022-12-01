@@ -1,22 +1,10 @@
 const INPUT: &str = include_str!("real_input.txt");
 
 fn calories(input: &str) -> impl Iterator<Item = u64> + '_ {
-	let mut input = input.lines();
-	std::iter::from_fn(move || {
-		let mut sum = 0;
-		for line in input.by_ref() {
-			if let Ok(n) = line.parse::<u64>() {
-				sum += n;
-			} else {
-				break;
-			}
-		}
-
-		if sum > 0 {
-			Some(sum)
-		} else {
-			None
-		}
+	input.split("\n\n").map(|s| {
+		s.lines()
+			.map(|l| l.parse::<u64>().expect("invalid input"))
+			.sum()
 	})
 }
 
