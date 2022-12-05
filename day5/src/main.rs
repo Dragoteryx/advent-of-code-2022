@@ -52,8 +52,8 @@ fn part1(input: &str, n: usize) -> String {
 	for mov in moves {
 		if mov.from == mov.to { continue; }
 		unsafe {
-			let from = (*boxes_mut).get_mut(mov.from).unwrap();
-			let to = (*boxes_mut).get_mut(mov.to).unwrap();
+			let from = &mut (*boxes_mut)[mov.from];
+			let to = &mut (*boxes_mut)[mov.to];
 			for _ in 0..mov.n {
 				to.push_front(from.pop_front().unwrap());
 			}
@@ -69,8 +69,8 @@ fn part2(input: &str, n: usize) -> String {
 	for mov in moves {
 		if mov.from == mov.to { continue; }
 		unsafe {
-			let from = (*boxes_mut).get_mut(mov.from).unwrap();
-			let to = (*boxes_mut).get_mut(mov.to).unwrap();
+			let from = &mut (*boxes_mut)[mov.from];
+			let to = &mut (*boxes_mut)[mov.to];
 			for c in from.drain(0..mov.n).rev() {
 				to.push_front(c);
 			}
