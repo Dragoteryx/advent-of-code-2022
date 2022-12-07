@@ -49,7 +49,7 @@ impl<'a> Directory<'a> {
 		self.dirs.iter().map(|(_, dir)| dir)
 	}
 
-	pub fn recur(&'a self) -> Box<dyn Iterator<Item = &Directory<'a>> + 'a>  {
+	pub fn recur(&self) -> Box<dyn Iterator<Item = &Directory<'a>> + '_>  {
 		Box::new(once(self).chain(self.dirs().flat_map(|dir| dir.recur())))
 	}
 }
