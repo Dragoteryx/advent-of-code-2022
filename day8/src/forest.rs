@@ -1,6 +1,6 @@
 use std::fmt::{self, Debug};
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Forest {
 	trees: Vec<Vec<u8>>
 }
@@ -34,6 +34,15 @@ impl Forest {
 				}
 			})
 		})
+	}
+}
+
+impl Debug for Forest {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "Forest ")?;
+		f.debug_list()
+			.entries(self.trees())
+			.finish()
 	}
 }
 
