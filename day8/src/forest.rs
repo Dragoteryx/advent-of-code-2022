@@ -108,14 +108,18 @@ impl<'f> Tree<'f> {
 
 	pub fn scenic_score(&self) -> usize {
 		fn take_while_include<T>(iter: impl Iterator<Item = T>, mut func: impl FnMut(&T) -> bool) -> impl Iterator<Item = T> {
-			let mut items = Vec::new();
-			for item in iter {
-				let ok = func(&item);
-				items.push(item);
-				if !ok { break; }
-			}
-
-			items.into_iter()
+			let mut iter = Some(iter);
+			std::iter::from_fn(move || {
+				iter.as_mut().and_then(|iter| {
+					iter.next().map(|item| (func(&item), item))
+				}).map(|res| match res {
+					(true, item) => item,
+					(false, item) => {
+						iter = None;
+						item
+					}
+				})
+			})
 		}
 
 		let top = take_while_include(self.top_trees(), |tree| tree.size < self.size).count();
