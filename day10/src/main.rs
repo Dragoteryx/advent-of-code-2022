@@ -49,7 +49,7 @@ fn part2(input: &str) {
 		let pixel = (cycle - 1) % 40;
 
 		if pixel.abs_diff(x) < 2 {
-			print!("#");
+			print!("█");
 		} else {
 			print!(" ");
 		}
