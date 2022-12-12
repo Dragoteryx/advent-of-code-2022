@@ -1,4 +1,5 @@
 use std::collections::{HashMap, VecDeque};
+use std::collections::hash_map::Entry;
 use std::fmt::{self, Debug};
 
 #[derive(Clone, PartialEq, Eq, Hash)]
@@ -74,10 +75,6 @@ pub struct Square<'h> {
 }
 
 impl<'h> Square<'h> {
-	pub fn distance(self, other: Self) -> usize {
-		self.x.abs_diff(other.x) + self.y.abs_diff(other.y)
-	}
-
 	pub fn elevation(self) -> u8 {
 		self.elevation
 	}
@@ -100,20 +97,9 @@ impl<'h> Square<'h> {
 	}
 	
 	pub fn shortest_path(self, goal: Self) -> Option<VecDeque<Self>> {
-		let mut open_queue = vec![self];
+		let mut squares = VecDeque::from([self]);
 		let mut came_from = HashMap::new();
-
-		let mut g_score = HashMap::from([(self, 0usize)]);
-		macro_rules! get_g_score {
-			($sq:expr) => { g_score.get(&$sq).copied().unwrap_or(usize::MAX) };
-		}
-
-		let mut f_score = HashMap::from([(self, self.distance(goal))]);
-		macro_rules! get_f_score {
-			($sq:expr) => { f_score.get(&$sq).copied().unwrap_or(usize::MAX) };
-		}
-
-		while let Some(current) = open_queue.pop() {
+		while let Some(current) = squares.pop_front() {
 			if goal == current {
 				let mut current = current;
 				let mut path = VecDeque::from([current]);
@@ -125,20 +111,11 @@ impl<'h> Square<'h> {
 				return Some(path);
 			} else {
 				for neighbor in current.reachable_neighbors() {
-					let tentative_g_score = get_g_score!(current) + 1;
-					if tentative_g_score < get_g_score!(neighbor) {
-						came_from.insert(neighbor, current);
-						g_score.insert(neighbor, tentative_g_score);
-						f_score.insert(neighbor, tentative_g_score + neighbor.distance(goal));
-						if !open_queue.iter().any(|&sq| sq == neighbor) {
-							open_queue.push(neighbor);
-						}
+					if let Entry::Vacant(entry) = came_from.entry(neighbor) {
+						squares.push_back(neighbor);
+						entry.insert(current);
 					}
 				}
-			
-				open_queue.sort_by(|&sq1, &sq2| {
-					get_f_score!(sq2).cmp(&get_f_score!(sq1))
-				});
 			}
 		}
 
