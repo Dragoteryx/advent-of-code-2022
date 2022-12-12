@@ -32,7 +32,7 @@ fn part1(heightmap: &Heightmap) -> usize {
 }
 
 /// Rayon ❤️
-/// This most definitely isn't the most efficient way to do this but I'm lazy.
+/// This definitely isn't the most efficient way to do this but I'm lazy.
 fn part2(heightmap: &Heightmap) -> usize {
 	heightmap.squares()
 		.filter(|sq| sq.elevation() == 0)
