@@ -31,14 +31,16 @@ fn part1(heightmap: &Heightmap) -> usize {
 	heightmap.start().shortest_path(heightmap.end()).unwrap().len()
 }
 
-// Rayon ❤️
+/// Rayon ❤️
+/// This most definitely isn't the most efficient way to do this but I'm lazy.
 fn part2(heightmap: &Heightmap) -> usize {
-	let lowest: Vec<_> = heightmap.squares().filter(|sq| sq.elevation() == 0).collect();
-	let paths: Vec<_> = lowest.into_par_iter().flat_map(|sq| sq.shortest_path(heightmap.end())).collect();
-	paths.into_iter().reduce(|shortest, path| {
-		if shortest.len() > path.len() { path }
-		else { shortest }
-	}).unwrap().len()
+	heightmap.squares()
+		.filter(|sq| sq.elevation() == 0)
+		.collect::<Vec<_>>()
+		.into_par_iter()
+		.flat_map(|sq| sq.shortest_path(heightmap.end()))
+		.map(|path| path.len())
+		.min().unwrap()
 }
 
 fn main() {
