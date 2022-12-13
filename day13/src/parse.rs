@@ -1,4 +1,3 @@
-use nom::character::complete::u8;
 use nom::IResult;
 use super::*;
 
@@ -18,6 +17,7 @@ fn packet(input: &str) -> IResult<&str, Packet> {
 }
 
 fn packet_data(input: &str) -> IResult<&str, PacketData> {
+	use nom::character::complete::u8;
 	use nom::combinator::map;
 	use nom::branch::alt;
 
