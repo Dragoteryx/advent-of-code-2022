@@ -1,11 +1,18 @@
 use std::cell::{Cell, RefCell};
 use std::fmt::{self, Debug};
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Operation {
+	Mult(u128),
+	Add(u128),
+	Square,
+}
+
 /// Return to monke.
 pub struct Monke {
 	items: RefCell<Vec<u128>>,
 	inspected: Cell<u128>,
-	operation: Box<dyn Fn(u128) -> u128>,
+	operation: Operation,
 	test: u128,
 	if_true: usize,
 	if_false: usize
@@ -24,7 +31,7 @@ impl Debug for Monke {
 impl Monke {
 	pub fn new(
 		items: Vec<u128>,
-		operation: impl Fn(u128) -> u128 + 'static,
+		operation: Operation,
 		test: u128,
 		if_true: usize,
 		if_false: usize
@@ -32,8 +39,8 @@ impl Monke {
 		Self {
 			items: RefCell::new(items), 
 			inspected: Cell::new(0),
-			operation: Box::new(operation),
-			test, if_true, if_false
+			operation, test,
+			if_true, if_false
 		}
 	}
 
@@ -49,7 +56,12 @@ impl Monke {
 		for old_worry_level in self.items.borrow_mut().drain(..) {
 			self.inspected.set(self.inspected.get() + 1);
 
-			let new_worry_level = manage_worry((self.operation)(old_worry_level));
+			let new_worry_level = manage_worry(match self.operation {
+				Operation::Square => old_worry_level.pow(2),
+				Operation::Mult(n) => old_worry_level * n,
+				Operation::Add(n) => old_worry_level + n
+			});
+
 			let monke = if new_worry_level % self.test == 0 {
 				&monkeys[self.if_true]
 			} else {
