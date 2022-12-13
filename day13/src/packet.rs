@@ -1,11 +1,11 @@
 use std::cmp::Ordering;
 
-pub(crate) type Packet = Vec<PacketData>;
+pub type Packet = Vec<PacketData>;
 
-pub(crate) type PacketPair = [Packet; 2];
+pub type PacketPair = [Packet; 2];
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub(crate) enum PacketData {
+pub enum PacketData {
 	List(Packet),
 	Integer(u8)
 }
