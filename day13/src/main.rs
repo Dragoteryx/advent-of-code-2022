@@ -4,7 +4,7 @@ mod packet;
 use packet::*;
 
 fn right_order([left, right]: &PacketPair) -> bool {
-	left < right
+	left <= right
 }
 
 fn organize_packets(packets: Vec<PacketPair>) -> Vec<Packet> {
